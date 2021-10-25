@@ -88,6 +88,39 @@ namespace RootKoreanMod
                 FontBundle = AssetBundle.LoadFromFile(assetBundlePath);
                 Logger.LogInfo($"Assetbundle loaded : {FontBundle != null}");
             }
+
+            var fonts = Resources.FindObjectsOfTypeAll<TMP_FontAsset>();
+            foreach (var item in fonts)
+            {
+                AddFallbackFont(item);
+            }
+        }
+
+        private const string REGULAR = "SourceHanSerifK-Regular SDF";
+        private const string BOLD = "SourceHanSerifK-Bold SDF";
+
+        private static readonly IDictionary<string, string> FontMapping = new Dictionary<string, string>()
+        {
+            { "SourceHanSerifSC-Regular SDF", REGULAR },
+            { "SourceHanSerifSC-Bold SDF", BOLD },
+            { "SourceHanSerifSC-Regular SDF_BlackStroke", BOLD },
+        };
+
+        public static void AddFallbackFont(TMP_FontAsset font)
+        {
+            if (ModMain.FontBundle == null)
+            {
+                return;
+            }
+
+            if (FontMapping.TryGetValue(font.name, out var krfontname))
+            {
+                var krfont = ModMain.FontBundle.LoadAsset<TMP_FontAsset>(krfontname);
+                if (!font.fallbackFontAssetTable.Contains(krfont))
+                {
+                    font.fallbackFontAssetTable.Add(krfont);
+                }
+            }
         }
     }
 }
