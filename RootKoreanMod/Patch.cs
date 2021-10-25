@@ -12,25 +12,26 @@ namespace RootKoreanMod
 {
     public static class Patch
     {
-
-        [HarmonyPatch(typeof(Canis.utils.localization.L), "LT", argumentTypes: new Type[] { typeof(string) })]
-        public class L_LT_Patch
+        [HarmonyPatch(typeof(dwd.core.localization.LocalizationDB), "SetPairs", argumentTypes: new Type[] { typeof(IEnumerable<KeyValuePair<string, string>>) })]
+        public class LocalizationDB_SetPairs_Patch
         {
-            public static void Postfix(string key, ref string __result)
+            public static bool Prefix(ref IEnumerable<KeyValuePair<string, string>> pairs)
             {
-                if (ModMain.Translation == null)
+                if (ModMain.Translation != null)
                 {
-                    return;
+                    var dict = (Dictionary<string, string>) pairs;
+
+                    foreach (var item in ModMain.Translation)
+                    {
+                        dict[item.Key] = item.Value;
+                    }
                 }
 
-                if (ModMain.Translation.TryGetValue(key, out string translation))
-                {
-                    __result = translation;
-                }
+                return true;
             }
         }
 
-        private static IDictionary<string, string> FontMapping = new Dictionary<string, string>()
+        private static readonly IDictionary<string, string> FontMapping = new Dictionary<string, string>()
         {
             { "SourceHanSerifSC-Regular SDF", "SourceHanSerifK-Regular SDF" },
             { "SourceHanSerifSC-Bold SDF", "SourceHanSerifK-Bold SDF" },

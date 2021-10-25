@@ -27,7 +27,17 @@ namespace RootKoreanMod
 
         public void Awake()
         {
-            Translation = LoadTranslation();
+            try
+            {
+                Translation = LoadTranslation();
+                Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
+            }
+            catch (Exception e)
+            {
+
+                Logger.LogError(e.Message);
+                Logger.LogError(e.StackTrace);
+            }
         }
 
         public IDictionary<string, string> LoadTranslation()
@@ -58,7 +68,6 @@ namespace RootKoreanMod
             try
             {
                 LoadFontBundle();
-                Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
             }
             catch (Exception e)
             {

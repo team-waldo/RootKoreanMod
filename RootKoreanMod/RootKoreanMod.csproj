@@ -17,6 +17,10 @@
       <HintPath>..\Lib\BepInEx.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="core-sqlite">
+      <HintPath>..\Lib\core-sqlite.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>..\Lib\Unity.TextMeshPro.dll</HintPath>
       <Private>false</Private>
